@@ -2,7 +2,7 @@
     <form [formGroup]="form" (ngSubmit)="save(form)">
 
         <mat-card-content>
-            <p>
+            <!-- <p>
                 <mat-form-field appearance="fill">
                     <mat-label>Код продукта</mat-label>
                     <input matInput formControlName="productCode">
@@ -26,7 +26,20 @@
                     <input matInput type="number" class="example-right-align" placeholder="0" formControlName="price">
                     <span matSuffix>.00</span>
                 </mat-form-field>
-            </p>
+            </p> -->
+            <mat-form-field appearance="fill">
+                <mat-label>Number</mat-label>
+                <input matInput type="text" [formControl]="textFormControl" [errorStateMatcher]="matcher"
+                    placeholder="Pick one" aria-label="Number" [matAutocomplete]="auto">
+                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                        {{option}}
+                    </mat-option>
+                </mat-autocomplete>
+                <!-- <mat-error *ngIf="textFormControl.hasError('required')">
+                    Email is <strong>required</strong>
+                </mat-error> -->
+            </mat-form-field>
         </mat-card-content>
         <mat-card-actions>
             <button mat-button ng>Сохранить</button>
