@@ -20,7 +20,5 @@ export class ProductListComponent implements OnInit {
     this.priceListService.getPriceList()
       .subscribe((data: Array<PriceList>) => this.priceList = data);
   }
-
-
 }
 
