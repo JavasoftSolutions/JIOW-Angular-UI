@@ -28,8 +28,8 @@ export class ProductDetailComponent {
   textFormControl = new FormControl('', [Validators.required]);
   matcher = new MyErrorStateMatcher();
 
-  options: Array<Product> = []; // Тут тоже нужно посмотреть!!! (Модели и Сервисы Продукта, а так же product-detail.component.html)
-  ops: string[] = [];
+  productArr: Array<Product> = []; // Тут тоже нужно посмотреть!!! (Модели и Сервисы Продукта, а так же product-detail.component.html)
+  productAutos: string[] = [];
   filteredOptions: Observable<string[]> = new Observable();
 
   form: FormGroup = new FormGroup({
@@ -50,8 +50,8 @@ export class ProductDetailComponent {
   }
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-    this.options.forEach(option => this.ops.push(option.toString()));
-    return this.ops.filter(op => op.toLowerCase().includes(filterValue));
+    this.productArr.forEach(productArrToString => this.productAutos.push(productArrToString.toString()));
+    return this.productAutos.filter(productAuto => productAuto.toLowerCase().includes(filterValue));
   }
 
   save(form: any): void {

@@ -32,8 +32,8 @@
                 <input type="text" matInput [formControl]="textFormControl" [errorStateMatcher]="matcher"
                     [matAutocomplete]="auto" placeholder="Pick one">
                 <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                    <mat-option *ngFor="let op of filteredOptions | async" [value]="op">
-                        {{op}}
+                    <mat-option *ngFor="let productAuto of filteredOptions | async" [value]="productAuto">
+                        {{productAuto}}
                     </mat-option>
                 </mat-autocomplete>
                 <mat-hint>Errors appear instantly!</mat-hint>
