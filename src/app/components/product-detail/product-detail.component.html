@@ -6,7 +6,7 @@
                 <mat-form-field appearance="fill">
                     <mat-label>Product Code</mat-label>
                     <input type="text" matInput formControlName="productCode" [formControl]="textFormControl"
-                        [errorStateMatcher]="matcher" [matAutocomplete]="auto" placeholder="Pick one">
+                        [errorStateMatcher]="matcher" [matAutocomplete]="auto">
                     <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
                         <mat-option *ngFor="let productOption of filteredOptions | async" [value]="productOption">
                             {{productOption}}
@@ -18,7 +18,7 @@
                     </mat-error>
                 </mat-form-field>
             </p>
-            <!-- <p>
+            <p>
                 <mat-form-field appearance="fill">
                     <mat-label>Наименование</mat-label>
                     <input matInput formControlName="name" [formControl]="textFormControl"
@@ -48,10 +48,10 @@
                     <span matSuffix>.00</span>
                     <mat-hint>Errors appear instantly!</mat-hint>
                     <mat-error *ngIf="textFormControl.hasError('required')">
-                        Description <strong>isn't set</strong>
+                        Price <strong>isn't set</strong>
                     </mat-error>
                 </mat-form-field>
-            </p> -->
+            </p>
         </mat-card-content>
         <mat-card-actions>
             <button mat-button ng>Сохранить</button>

@@ -4,14 +4,13 @@ import { ProductService } from 'src/app/services/product.service';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { map, startWith, toArray } from 'rxjs/operators';
+import { map, startWith } from 'rxjs/operators';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { Product } from 'src/app/models/product';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.touched || isSubmitted));
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
   }
 }
 
@@ -23,10 +22,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 })
 
 export class ProductDetailComponent {
-
-  productGet: Observable<Product[]> = this.productService.getProduct();
-  productOptions: string[] = [];
-
+  productOptions: string[] = ['P1', 'P2', 'P3'];
   textFormControl = new FormControl('', [Validators.required]);
   matcher = new MyErrorStateMatcher();
   filteredOptions: Observable<string[]> = new Observable();
@@ -37,11 +33,10 @@ export class ProductDetailComponent {
     description: new FormControl(),
     productCode: new FormControl()
   });
-
-  constructor(private priceListService: PriceListService, private router: Router, private fb: FormBuilder, private productService: ProductService) { }
+  // , private productService: ProductService
+  constructor(private priceListService: PriceListService, private router: Router, private fb: FormBuilder) { }
 
   ngOnInit() {
-    this.productsToArr(this.productOptions);
     this.filteredOptions = this.textFormControl.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value || '')),
@@ -50,16 +45,17 @@ export class ProductDetailComponent {
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
+    // this.productsToArr();
     return this.productOptions.filter(productOption => productOption.toLowerCase().includes(filterValue));
   }
 
-  private productsToArr(products: string[]): void {
-    this.productGet.pipe(
-      map(product => product.find(
-        p => products.push(p.code.toString())
-      ))
-    );
-  }
+  // private productsToArr(): void {
+  //   this.productService.getProduct().pipe(
+  //     map(product => product.find(
+  //       p => this.productOptions.push(p.code.toString())
+  //     ))
+  //   );
+  // }
 
   save(form: any): void {
     this.priceListService.savePriceList({ price: this.form.value['price'], name: this.form.value['name'], description: this.form.value['description'], productCode: this.form.value['productCode'] }).subscribe(
