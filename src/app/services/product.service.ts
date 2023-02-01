@@ -8,9 +8,8 @@ export class ProductService {
     private productUrl = 'http://localhost:8080/product';
     constructor(private http: HttpClient) { }
 
-    getProduct(product: string[]) {
+    getProduct() {
         return this.http.get<Array<Product>>(this.productUrl);
-        return product; // не работает
     }
 
     saveProduct(product: Product) {

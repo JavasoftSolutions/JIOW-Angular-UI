@@ -4,10 +4,9 @@ import { ProductService } from 'src/app/services/product.service';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { map, startWith, toArray } from 'rxjs/operators';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { Product } from 'src/app/models/product';
-
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -15,21 +14,21 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
     return !!(control && control.invalid && (control.touched || isSubmitted));
   }
 }
+
 @Component({
   selector: 'app-product-detail',
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.css'],
   providers: [PriceListService]
 })
+
 export class ProductDetailComponent {
 
-  // product: Observable<Product[]> = this.productService.getProduct();
+  productGet: Observable<Product[]> = this.productService.getProduct();
+  productOptions: string[] = [];
 
   textFormControl = new FormControl('', [Validators.required]);
   matcher = new MyErrorStateMatcher();
-
-  productArr: Array<Product> = []; // Тут тоже нужно посмотреть!!! (Модели и Сервисы Продукта, а так же product-detail.component.html)
-  productAutos: string[] = [];
   filteredOptions: Observable<string[]> = new Observable();
 
   form: FormGroup = new FormGroup({
@@ -42,16 +41,24 @@ export class ProductDetailComponent {
   constructor(private priceListService: PriceListService, private router: Router, private fb: FormBuilder, private productService: ProductService) { }
 
   ngOnInit() {
+    this.productsToArr(this.productOptions);
     this.filteredOptions = this.textFormControl.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value || '')),
     );
-    // this.product.subscribe((arr: Array<Product>) => this.options = arr);
   }
+
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-    this.productArr.forEach(productArrToString => this.productAutos.push(productArrToString.toString()));
-    return this.productAutos.filter(productAuto => productAuto.toLowerCase().includes(filterValue));
+    return this.productOptions.filter(productOption => productOption.toLowerCase().includes(filterValue));
+  }
+
+  private productsToArr(products: string[]): void {
+    this.productGet.pipe(
+      map(product => product.find(
+        p => products.push(p.code.toString())
+      ))
+    );
   }
 
   save(form: any): void {
