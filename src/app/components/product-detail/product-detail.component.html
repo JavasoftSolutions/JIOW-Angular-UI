@@ -5,15 +5,15 @@
             <p>
                 <mat-form-field appearance="fill">
                     <mat-label>Product Code</mat-label>
-                    <input type="text" matInput formControlName="productCode" [formControl]="textFormControl"
+                    <input type="text" matInput [formControl]="productCode" formControleName="productCoder"
                         [errorStateMatcher]="matcher" [matAutocomplete]="auto">
-                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
                         <mat-option *ngFor="let productOption of filteredOptions | async" [value]="productOption">
-                            {{productOption}}
+                            {{productOption.code}}
                         </mat-option>
                     </mat-autocomplete>
                     <mat-hint>Errors appear instantly!</mat-hint>
-                    <mat-error *ngIf="textFormControl.hasError('required')">
+                    <mat-error *ngIf="productCode.hasError('required')">
                         Product <strong>isn't choosen</strong>
                     </mat-error>
                 </mat-form-field>
@@ -21,10 +21,9 @@
             <p>
                 <mat-form-field appearance="fill">
                     <mat-label>Наименование</mat-label>
-                    <input matInput formControlName="name" [formControl]="textFormControl"
-                        [errorStateMatcher]="matcher">
+                    <input matInput formControlName="name" [formControl]="name" [errorStateMatcher]="matcher">
                     <mat-hint>Errors appear instantly!</mat-hint>
-                    <mat-error *ngIf="textFormControl.hasError('required')">
+                    <mat-error *ngIf="name.hasError('required')">
                         Name <strong>isn't written</strong>
                     </mat-error>
                 </mat-form-field>
@@ -32,10 +31,10 @@
             <p>
                 <mat-form-field appearance="fill">
                     <mat-label>Описание</mat-label>
-                    <input matInput formControlName="description" [formControl]="textFormControl"
+                    <input matInput formControlName="description" [formControl]="description"
                         [errorStateMatcher]="matcher">
                     <mat-hint>Errors appear instantly!</mat-hint>
-                    <mat-error *ngIf="textFormControl.hasError('required')">
+                    <mat-error *ngIf="description.hasError('required')">
                         Description <strong>isn't written</strong>
                     </mat-error>
                 </mat-form-field>
@@ -44,10 +43,10 @@
                 <mat-form-field appearance="fill" floatLabel="always">
                     <mat-label>Цена</mat-label>
                     <input matInput type="number" class="example-right-align" placeholder="0" formControlName="price"
-                        [formControl]="textFormControl" [errorStateMatcher]="matcher">
+                        [formControl]="price" [errorStateMatcher]="matcher">
                     <span matSuffix>.00</span>
                     <mat-hint>Errors appear instantly!</mat-hint>
-                    <mat-error *ngIf="textFormControl.hasError('required')">
+                    <mat-error *ngIf="price.hasError('required')">
                         Price <strong>isn't set</strong>
                     </mat-error>
                 </mat-form-field>

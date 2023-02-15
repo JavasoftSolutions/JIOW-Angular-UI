@@ -12,6 +12,10 @@ export class ProductService {
         return this.http.get<Array<Product>>(this.productUrl);
     }
 
+    getProductByCodeLike(productCode: string) {
+        return this.http.get<Array<Product>>(this.productUrl + "?code=" + productCode);
+    }
+
     saveProduct(product: Product) {
         return this.http.post<Product>(this.productUrl, product);
     }

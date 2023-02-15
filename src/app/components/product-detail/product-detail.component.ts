@@ -2,15 +2,16 @@ import { Component, Input, OnInit } from '@angular/core';
 import { PriceListService } from 'src/app/services/pricelist.service';
 import { ProductService } from 'src/app/services/product.service';
 import { Router } from '@angular/router';
-import { FormGroup, FormBuilder, Validators, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl, FormGroupDirective, NgForm, UntypedFormGroup, UntypedFormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { map, startWith, switchMap } from 'rxjs/operators';
 import { ErrorStateMatcher } from '@angular/material/core';
+import { Product } from 'src/app/models/product';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+    return !!(control && control.invalid && (control.touched || isSubmitted));
   }
 }
 
@@ -18,47 +19,44 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   selector: 'app-product-detail',
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.css'],
-  providers: [PriceListService]
+  providers: [PriceListService, ProductService]
 })
 
-export class ProductDetailComponent {
-  productOptions: string[] = ['P1', 'P2', 'P3'];
-  textFormControl = new FormControl('', [Validators.required]);
-  matcher = new MyErrorStateMatcher();
-  filteredOptions: Observable<string[]> = new Observable();
+export class ProductDetailComponent implements OnInit {
 
-  form: FormGroup = new FormGroup({
-    price: new FormControl(),
-    name: new FormControl(),
-    description: new FormControl(),
-    productCode: new FormControl()
-  });
-  // , private productService: ProductService
-  constructor(private priceListService: PriceListService, private router: Router, private fb: FormBuilder) { }
+  productCode = new FormControl<string | Product>('', [Validators.required]);
+  name = new FormControl<string>('', [Validators.required]);
+  description = new FormControl<string>('', [Validators.required]);
+  price = new UntypedFormControl([Validators.required]);
+  productOptions: Product[] = [{ code: 'p1', name: 'Milk', description: 'p3' }];
+  matcher = new MyErrorStateMatcher();
+  filteredOptions = new Observable<Product[]>();
+
+  // form: FormGroup = new FormGroup({
+  //   price: new UntypedFormControl(),
+  //   name: new UntypedFormControl(),
+  //   description: new UntypedFormControl(),
+  //   productCoder: new FormControl<string | Product>('', [Validators.required]),
+  // });
+
+  constructor(private priceListService: PriceListService, private router: Router, private fb: FormBuilder, private productService: ProductService) { }
 
   ngOnInit() {
-    this.filteredOptions = this.textFormControl.valueChanges.pipe(
+    this.filteredOptions = this.productCode.valueChanges.pipe(
       startWith(''),
-      map(value => this._filter(value || '')),
+      switchMap(value => {
+        const code = typeof value === 'string' ? value : value?.code;
+        return this.productService.getProductByCodeLike(code as string);
+      })
     );
   }
 
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    // this.productsToArr();
-    return this.productOptions.filter(productOption => productOption.toLowerCase().includes(filterValue));
+  displayFn(product: Product): string {
+    return product && product.code ? product.code : '';
   }
 
-  // private productsToArr(): void {
-  //   this.productService.getProduct().pipe(
-  //     map(product => product.find(
-  //       p => this.productOptions.push(p.code.toString())
-  //     ))
-  //   );
-  // }
-
   save(form: any): void {
-    this.priceListService.savePriceList({ price: this.form.value['price'], name: this.form.value['name'], description: this.form.value['description'], productCode: this.form.value['productCode'] }).subscribe(
+    this.priceListService.savePriceList({ price: this.price.value, name: this.name.value as string, description: this.description.value as string, productCode: this.productCode.value as string }).subscribe(  // We need to change productCode saving path
       {
         next: (v) => console.log(v),
         error: (e) => console.error(e),
