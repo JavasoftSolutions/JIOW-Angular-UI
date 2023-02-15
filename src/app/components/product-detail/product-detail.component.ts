@@ -44,7 +44,7 @@ export class ProductDetailComponent implements OnInit {
 
 
   save(form: any): void {
-    this.priceListService.savePriceList({ price: this.form.value['price'], name: this.form.value['name'], description: this.form.value['description'], productCode: this.form.value['productCode'] }).subscribe(
+    this.priceListService.savePriceList({ "price": this.form.value['price'], "name": this.form.value['name'], "description": this.form.value['description'], "productCode":  (typeof this.productCode.value === 'string' ? this.productCode.value : this.productCode.value?.id) as string }).subscribe(
       {
         next: (v) => console.log(v),
         error: (e) => console.error(e),
