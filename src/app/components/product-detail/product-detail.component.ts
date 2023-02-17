@@ -8,10 +8,11 @@ import { map, startWith, switchMap } from 'rxjs/operators';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { Product } from 'src/app/models/product';
 
+//Error Valid class
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.touched || isSubmitted));
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
   }
 }
 
@@ -24,39 +25,55 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 
 export class ProductDetailComponent implements OnInit {
 
-  productCode = new FormControl<string | Product>('', [Validators.required]);
+  //constructors
+  constructor(private priceListService: PriceListService, private productService: ProductService, private router: Router, private fb: FormBuilder) { }
+
+  //FormControlers
+  productCode = new FormControl<string | Product>('', [Validators.required]);   // productOptions: Product[] = [{ code: 'p1', name: 'Milk', description: 'p3' }];
   name = new FormControl<string>('', [Validators.required]);
-  description = new FormControl<string>('', [Validators.required]);
-  price = new UntypedFormControl([Validators.required]);
-  productOptions: Product[] = [{ code: 'p1', name: 'Milk', description: 'p3' }];
+  price = new FormControl<any>('', [Validators.min(100)]);
+  description = new FormControl<string>('');
+
+  //Error Valid
   matcher = new MyErrorStateMatcher();
+
+  //Product provider
   filteredOptions = new Observable<Product[]>();
 
-  // form: FormGroup = new FormGroup({
-  //   price: new UntypedFormControl(),
-  //   name: new UntypedFormControl(),
-  //   description: new UntypedFormControl(),
-  //   productCoder: new FormControl<string | Product>('', [Validators.required]),
-  // });
+  //ONLY for productCode
+  private productCodeValue(value: string | Product | null): string {
+    const code = typeof value === 'string' ? value : value?.code;  //getting .code from product
+    return code as string;
+  }
 
-  constructor(private priceListService: PriceListService, private router: Router, private fb: FormBuilder, private productService: ProductService) { }
+  private stringValues(value: string | null): string {
+    if (value == '') return 'none'; // mightn't work on name because of Validator.reqired
+    return value as string;
+  }
 
   ngOnInit() {
+    //to activise the autocompleter for productCode
     this.filteredOptions = this.productCode.valueChanges.pipe(
       startWith(''),
       switchMap(value => {
-        const code = typeof value === 'string' ? value : value?.code;
-        return this.productService.getProductByCodeLike(code as string);
+        return this.productService.getProductByCodeLike(this.productCodeValue(value));
       })
     );
   }
 
+
+  // doesn't needed
   displayFn(product: Product): string {
     return product && product.code ? product.code : '';
   }
 
+
+  // form is used to realise saving priceList ONLY
+  form: UntypedFormGroup = new UntypedFormGroup({});
   save(form: any): void {
-    this.priceListService.savePriceList({ price: this.price.value, name: this.name.value as string, description: this.description.value as string, productCode: this.productCode.value as string }).subscribe(  // We need to change productCode saving path
+    this.priceListService.savePriceList({
+      price: this.price.value, name: this.stringValues(this.name.value), description: this.stringValues(this.description.value), productCode: this.productCodeValue(this.productCode.value)
+    }).subscribe(
       {
         next: (v) => console.log(v),
         error: (e) => console.error(e),
