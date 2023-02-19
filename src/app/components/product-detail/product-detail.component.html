@@ -21,8 +21,11 @@
             <p>
                 <mat-form-field appearance="fill">
                     <mat-label>Наименование</mat-label>
-                    <input type="text" matInput [formControl]="name">
+                    <input type="text" matInput [formControl]="name" [errorStateMatcher]="matcher">
                     <mat-hint>Errors appear instantly!</mat-hint>
+                    <mat-error *ngIf="name.hasError('minLength') && !name.hasError('required')">
+                        Name of Product<strong> is too short</strong>
+                    </mat-error>
                     <mat-error *ngIf="name.hasError('required')">
                         Name <strong>isn't written</strong>
                     </mat-error>
@@ -37,11 +40,13 @@
             <p>
                 <mat-form-field appearance="fill" floatLabel="always">
                     <mat-label>Цена</mat-label>
-                    <input matInput type="number" class="example-right-align" placeholder="0" [formControl]="price">
+                    <input matInput type="number" class="example-right-align" placeholder="0" [formControl]="price"
+                        [errorStateMatcher]="matcher">
                     <span matSuffix>.00</span>
+                    <span matSuffix class="vallet">$&nbsp;</span>
                     <mat-hint>Errors appear instantly!</mat-hint>
                     <mat-error *ngIf="price.hasError('min')">
-                        Price <strong>is cheaper than your product</strong>
+                        Price <strong>is cheaper than you might choose</strong>
                     </mat-error>
                 </mat-form-field>
             </p>

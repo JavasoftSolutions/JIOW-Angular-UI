@@ -29,24 +29,24 @@ export class ProductDetailComponent implements OnInit {
   constructor(private priceListService: PriceListService, private productService: ProductService, private router: Router, private fb: FormBuilder) { }
 
   //FormControlers
-  productCode = new FormControl<string | Product>('', [Validators.required]);   // productOptions: Product[] = [{ code: 'p1', name: 'Milk', description: 'p3' }];
-  name = new FormControl<string>('', [Validators.required]);
+  productCode = new FormControl<string | Product>('', [Validators.required]);
+  name = new FormControl<string>('', [Validators.required, Validators.minLength(6)]);
   price = new FormControl<any>('', [Validators.min(100)]);
   description = new FormControl<string>('');
 
-  //Error Valid
+  //Error Validator
   matcher = new MyErrorStateMatcher();
 
   //Product provider
   filteredOptions = new Observable<Product[]>();
 
   //ONLY for productCode
-  private productCodeValue(value: string | Product | null): string {
+  private getProductCodeValue(value: string | Product | null): string {
     const code = typeof value === 'string' ? value : value?.code;  //getting .code from product
     return code as string;
   }
 
-  private stringValues(value: string | null): string {
+  private getValueAsString(value: string | null): string {
     if (value == '') return 'none'; // mightn't work on name because of Validator.reqired
     return value as string;
   }
@@ -56,11 +56,10 @@ export class ProductDetailComponent implements OnInit {
     this.filteredOptions = this.productCode.valueChanges.pipe(
       startWith(''),
       switchMap(value => {
-        return this.productService.getProductByCodeLike(this.productCodeValue(value));
+        return this.productService.getProductByCodeLike(this.getProductCodeValue(value));
       })
     );
   }
-
 
   // doesn't needed
   displayFn(product: Product): string {
@@ -72,7 +71,10 @@ export class ProductDetailComponent implements OnInit {
   form: UntypedFormGroup = new UntypedFormGroup({});
   save(form: any): void {
     this.priceListService.savePriceList({
-      price: this.price.value, name: this.stringValues(this.name.value), description: this.stringValues(this.description.value), productCode: this.productCodeValue(this.productCode.value)
+      price: this.price.value,
+      name: this.getValueAsString(this.name.value),
+      description: this.getValueAsString(this.description.value),
+      productCode: this.getProductCodeValue(this.productCode.value)
     }).subscribe(
       {
         next: (v) => console.log(v),
