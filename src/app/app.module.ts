@@ -8,10 +8,10 @@ import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { HttpClientModule } from '@angular/common/http';
 import { PriceListService } from './services/pricelist.service';
-import { ProductDetailComponent } from './components/product-detail/product-detail.component';
+import { PriceListFillerComponent } from './components/price-list-filler/price-list-filler.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
-import { ProductListComponent } from './components/product-list/product-list.component';
+import { PriceListComponent } from './components/price-list/price-list.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
@@ -22,8 +22,8 @@ import { MatOptionModule } from '@angular/material/core';
 @NgModule({
   declarations: [
     AppComponent,
-    ProductDetailComponent,
-    ProductListComponent
+    PriceListFillerComponent,
+    PriceListComponent
   ],
   imports: [
     BrowserModule,

@@ -18,12 +18,12 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 
 @Component({
   selector: 'app-product-detail',
-  templateUrl: './product-detail.component.html',
-  styleUrls: ['./product-detail.component.css'],
+  templateUrl: './price-list-filler.component.html',
+  styleUrls: ['./price-list-filler.component.css'],
   providers: [PriceListService, ProductService]
 })
 
-export class ProductDetailComponent implements OnInit {
+export class PriceListFillerComponent implements OnInit {
 
   //constructors
   constructor(private priceListService: PriceListService, private productService: ProductService, private router: Router, private fb: FormBuilder) { }

@@ -3,12 +3,12 @@ import { PriceList } from '../../models/pricelist';
 import { PriceListService } from '../../services/pricelist.service';
 
 @Component({
-  selector: 'app-product-list',
-  templateUrl: './product-list.component.html',
-  styleUrls: ['./product-list.component.css'],
+  selector: 'app-price-list',
+  templateUrl: './price-list.component.html',
+  styleUrls: ['./price-list.component.css'],
   providers: [PriceListService]
 })
-export class ProductListComponent implements OnInit {
+export class PriceListComponent implements OnInit {
 
   constructor(private priceListService: PriceListService) { }
 

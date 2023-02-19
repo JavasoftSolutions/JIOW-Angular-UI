@@ -43,7 +43,6 @@
                     <input matInput type="number" class="example-right-align" placeholder="0" [formControl]="price"
                         [errorStateMatcher]="matcher">
                     <span matSuffix>.00</span>
-                    <span matSuffix class="vallet">$&nbsp;</span>
                     <mat-hint>Errors appear instantly!</mat-hint>
                     <mat-error *ngIf="price.hasError('min')">
                         Price <strong>is cheaper than you might choose</strong>
