@@ -8,7 +8,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { HttpClientModule } from '@angular/common/http';
 import { PriceListService } from './services/pricelist.service';
-import { PriceListFillerComponent } from './components/price-list-filler/price-list-filler.component';
+import { PriceListSetterComponent } from './components/price-list-setter/price-list-setter.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
 import { PriceListComponent } from './components/price-list/price-list.component';
@@ -22,7 +22,7 @@ import { MatOptionModule } from '@angular/material/core';
 @NgModule({
   declarations: [
     AppComponent,
-    PriceListFillerComponent,
+    PriceListSetterComponent,
     PriceListComponent
   ],
   imports: [

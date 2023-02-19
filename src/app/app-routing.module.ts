@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PriceListFillerComponent } from './components/price-list-filler/price-list-filler.component';
+import { PriceListSetterComponent } from './components/price-list-setter/price-list-setter.component';
 import { PriceListComponent } from './components/price-list/price-list.component';
 
 const routes: Routes = [
-  { path: 'productDetail', component: PriceListFillerComponent },
+  // I can't to change names of routers
+  { path: 'productDetail', component: PriceListSetterComponent },
   { path: 'productList', component: PriceListComponent }
 ];
 

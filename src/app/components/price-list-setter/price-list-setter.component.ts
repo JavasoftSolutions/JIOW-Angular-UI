@@ -17,13 +17,13 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 }
 
 @Component({
-  selector: 'app-product-detail',
-  templateUrl: './price-list-filler.component.html',
-  styleUrls: ['./price-list-filler.component.css'],
+  selector: 'app-price-list-setter',
+  templateUrl: './price-list-setter.component.html',
+  styleUrls: ['./price-list-setter.component.css'],
   providers: [PriceListService, ProductService]
 })
 
-export class PriceListFillerComponent implements OnInit {
+export class PriceListSetterComponent implements OnInit {
 
   //constructors
   constructor(private priceListService: PriceListService, private productService: ProductService, private router: Router, private fb: FormBuilder) { }
@@ -42,23 +42,26 @@ export class PriceListFillerComponent implements OnInit {
 
   //ONLY for productCode
   private getProductCodeValue(value: string | Product | null): string {
-    const code = typeof value === 'string' ? value : value?.code;  //getting .code from product
+    const code = typeof value === 'string' ? value : value?.code;  //getting product.code 
     return code as string;
   }
-
-  private getValueAsString(value: string | null): string {
-    if (value == '') return 'none'; // mightn't work on name because of Validator.reqired
-    return value as string;
-  }
-
-  ngOnInit() {
-    //to activise the autocompleter for productCode
+  private productCodeAutocompleteForm(): void {
     this.filteredOptions = this.productCode.valueChanges.pipe(
       startWith(''),
       switchMap(value => {
         return this.productService.getProductByCodeLike(this.getProductCodeValue(value));
       })
     );
+  }
+
+  private getValueAsString(value: string | null): string {
+    if (value == '' && value != this.name.value) return 'none';
+    return value as string;
+  }
+
+  //main working function
+  ngOnInit() {
+    this.productCodeAutocompleteForm();
   }
 
   // doesn't needed
@@ -79,7 +82,7 @@ export class PriceListFillerComponent implements OnInit {
       {
         next: (v) => console.log(v),
         error: (e) => console.error(e),
-        complete: () => this.router.navigate(['/productList'])
+        complete: () => this.router.navigate(['/productList']) // see src/app/app-routing.module.ts
       }
     )
   }
