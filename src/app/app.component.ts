@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { PriceList } from './models/pricelist';
 import { PriceListService } from './services/pricelist.service';
+import { NgModule } from '@angular/core';
+import { CustomerComponent } from './components/customer/customer.component';
+import { Router } from '@angular/router';
 
 export interface PeriodicElement {
   name: string;
@@ -30,7 +33,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 export class AppComponent implements OnInit {
 
-  constructor(private priceListService: PriceListService) { }
+  constructor(private priceListService: PriceListService, private router: Router) { }
 
   priceList: Array<PriceList> = [];
 
@@ -44,4 +47,10 @@ export class AppComponent implements OnInit {
       .subscribe((data: Array<PriceList>) => this.priceList = data);
   }
 
+
+  // Customer Component to acsess the customer
+  isNotHidden = true;
+  onClick() {
+    this.isNotHidden = false;
+  }
 }

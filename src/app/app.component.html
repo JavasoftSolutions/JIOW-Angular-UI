@@ -7,8 +7,11 @@
 </div>
 
 <div class="content" role="main">
-  <button mat-raised-button color="basic" routerLink="/productList">
+  <!-- <button mat-raised-button color="basic" routerLink="/priceList">
     Продукты
+  </button> -->
+  <button mat-raised-button color="basic" routerLink="/customer" (click)="onClick()" *ngIf="isNotHidden">
+    Войти в систему
   </button>
 </div>
 <router-outlet></router-outlet>

@@ -1,0 +1,29 @@
+<mat-card>
+    <form>
+        <p>
+            <mat-form-field appearance="fill">
+                <mat-label>Name</mat-label>
+                <input type="email" matInput [formControl]="name" [errorStateMatcher]="matcher"
+                    placeholder="Enter your name">
+                <mat-error *ngIf="name.hasError('required')">
+                    Name <strong>isn't choosen</strong>
+                </mat-error>
+            </mat-form-field>
+        </p>
+        <p>
+            <mat-form-field appearance="fill">
+                <mat-label>Password</mat-label>
+                <input type="email" matInput [formControl]="password" [errorStateMatcher]="matcher"
+                    placeholder="Enter password">
+                <mat-error *ngIf="password.hasError('required')">
+                    Name <strong>isn't choosen</strong>
+                </mat-error>
+            </mat-form-field>
+        </p>
+        <p>
+            <button mat-raised-button color="basic" (click)="inClick()">
+                Подтвердить
+            </button>
+        </p>
+    </form>
+</mat-card>

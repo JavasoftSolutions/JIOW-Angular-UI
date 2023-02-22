@@ -9,7 +9,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import { Product } from 'src/app/models/product';
 
 //Error Valid class
-export class MyErrorStateMatcher implements ErrorStateMatcher {
+export class PriceListSetterErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     const isSubmitted = form && form.submitted;
     return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
@@ -26,7 +26,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 export class PriceListSetterComponent implements OnInit {
 
   //constructors
-  constructor(private priceListService: PriceListService, private productService: ProductService, private router: Router, private fb: FormBuilder) { }
+  constructor(private priceListService: PriceListService, private productService: ProductService, private router: Router) { }
 
   //FormControlers
   productCode = new FormControl<string | Product>('', [Validators.required]);
@@ -35,7 +35,7 @@ export class PriceListSetterComponent implements OnInit {
   description = new FormControl<string>('');
 
   //Error Validator
-  matcher = new MyErrorStateMatcher();
+  matcher = new PriceListSetterErrorStateMatcher();
 
   //Product provider
   filteredOptions = new Observable<Product[]>();
@@ -82,7 +82,7 @@ export class PriceListSetterComponent implements OnInit {
       {
         next: (v) => console.log(v),
         error: (e) => console.error(e),
-        complete: () => this.router.navigate(['/productList']) // see src/app/app-routing.module.ts
+        complete: () => this.router.navigate(['/priceList']) // see src/app/app-routing.module.ts
       }
     )
   }

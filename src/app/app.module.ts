@@ -17,13 +17,16 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatOptionModule } from '@angular/material/core';
-
+import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
+import { CustomerComponent } from './components/customer/customer.component';
+import { ProductService } from './services/product.service';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 @NgModule({
   declarations: [
     AppComponent,
     PriceListSetterComponent,
-    PriceListComponent
+    PriceListComponent,
+    CustomerComponent,
   ],
   imports: [
     BrowserModule,
@@ -40,8 +43,10 @@ import { MatOptionModule } from '@angular/material/core';
     ReactiveFormsModule,
     MatAutocompleteModule,
     MatOptionModule,
+    MatNativeDateModule,
+    MatDividerModule,
   ],
-  providers: [PriceListService],
+  providers: [PriceListService, ProductService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
