@@ -5,7 +5,7 @@
             <p>
                 <mat-form-field appearance="fill">
                     <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Код продукта</mat-label>
+                        <mat-label>Product Code</mat-label>
                         <input type="text" matInput [formControl]="productCode" [matAutocomplete]="auto">
                         <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
                           <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
@@ -17,26 +17,26 @@
             </p>
             <p>
                 <mat-form-field appearance="fill">
-                    <mat-label>Наименование</mat-label>
+                    <mat-label>Name</mat-label>
                     <input matInput formControlName="name">
                 </mat-form-field>
             </p>
             <p>
                 <mat-form-field appearance="fill">
-                    <mat-label>Описание</mat-label>
+                    <mat-label>Description</mat-label>
                     <input matInput formControlName="description">
                 </mat-form-field>
             </p>
             <p>
                 <mat-form-field appearance="fill" floatLabel="always">
-                    <mat-label>Цена</mat-label>
+                    <mat-label>Price</mat-label>
                     <input matInput type="number" class="example-right-align" placeholder="0" formControlName="price">
                     <span matSuffix>.00</span>
                 </mat-form-field>
             </p>
         </mat-card-content>
         <mat-card-actions>
-            <button mat-button ng>Сохранить</button>
+            <button mat-button ng>Save</button>
         </mat-card-actions>
     </form>
 </mat-card>
